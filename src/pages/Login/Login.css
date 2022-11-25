@@ -1,0 +1,18 @@
+.emailInput {
+    border: none;
+    outline: none;
+    /* width: 500px; */
+}
+.emailInput:active {
+    border: none;
+    outline: none;
+}
+
+.passInput {
+    border: none;
+    outline: none;
+}
+.passInput.active{
+    border: none;
+    outline: none;
+}
