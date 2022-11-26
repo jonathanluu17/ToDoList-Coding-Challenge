@@ -1,9 +1,11 @@
-import React, { Component, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState,useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Login.css'
+import UserContext from '../../contexts/UserContext'
 
 export function LoginPage() {
 
+    const navigate = useNavigate()
 
     // initialize form fields in state
     const [inputs, setInput] = useState({
@@ -21,10 +23,9 @@ export function LoginPage() {
         borderColor: '1px solid black',
         textvisible: 'hidden'
     })
-    // useEffect(() => {
-    //     console.log(inputs)
-    // })
 
+    // initialize context api 
+    const {setUserInfo} = useContext(UserContext);
 
     // validate email onchange
     const emailOnchange = (e) => {
@@ -72,14 +73,17 @@ export function LoginPage() {
             body: formData,
         })
         .then((res) => {
-            if (res.ok) res.json();
+            if (res.ok) return res.json();
             else throw new Error();
         })
         .then((res) => {
             // navigate to list page
+            setUserInfo({...res})
+            navigate('/list')
+
         })
         .catch((err) => console.log('test'))
-
+            // add error text on bad login
     }
 
     return (
