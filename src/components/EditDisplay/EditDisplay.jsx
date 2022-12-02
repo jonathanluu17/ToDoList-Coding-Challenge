@@ -1,6 +1,6 @@
 import React from 'react'
 
-export function EditDisplay({saveTask, taskValue}) {
+export default function EditDisplay({editTask, taskValue}) {
 
     // get value from input with an onchange
     // minimum one character max 25 characters

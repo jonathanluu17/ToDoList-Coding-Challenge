@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import UserContext from '../../contexts/UserContext'
 
 import EditDisplay from '../../components/EditDisplay/EditDisplay'
+import ItemDisplay from '../../components/ItemDisplay/ItemDisplay'
 
 export function ListPage() {
     const navigate = useNavigate()
@@ -10,40 +11,60 @@ export function ListPage() {
     const [taskList, setTaskList] = useState({})
 
     useEffect(() => {
-        const newList = {};
-        // pull from localstorage for values after looking for values
-        if (Object.keys(localStorage).length){ // check object keys length
-            // iterate through localstorage object, pulling the values and adding it to state
-            for (let i =0; i < Object.keys(localStorage).length; i++){
-                newList[Object.keys(localStorage)[i]] = JSON.parse(localStorage.getItem(Object.keys(localStorage([i]))));
-            }
-            setTaskList(newList);
+        if (!localStorage.allTasks){
+            localStorage.setItem('allTasks',JSON.stringify({})) // create our storage if no preexisting session
         }
+        taskListUpdate();
     },[])
 
+    const taskListUpdate = () => {
+        const newList = {};
+        // pull from localstorage for values after looking for values
+        const taskObject = JSON.parse(localStorage.getItem('allTasks')); // object pulled from local storage
+        if (Object.keys(taskObject).length){ // check if a task collection exists
+            for (let i =0; i < Object.keys(taskObject).length; i++){
+                newList[Object.keys(taskObject)[i]] = taskObject[Object.keys(taskObject)[i]]
+            }
+        }
+        console.log('taskupdate   ', taskObject)
+        setTaskList(newList);
+    }
 
     const newTask = () => {
         // add new task to our localstorage with no value
         // render it as edit state
         let key = 0;
-        if (Object.keys(localStorage.length)) {
-            key = Object.keys(localStorage)[Object.keys(localStorage).length]
+        const taskObject = JSON.parse(localStorage.getItem('allTasks'));
+        if (Object.keys(taskObject).length) {
+            key = Number(Object.keys(taskObject)[Object.keys(taskObject).length - 1]) + 1
         }
-        localStorage.setItem(key, JSON.stringify({
+        // update task object and re set
+        taskObject[key] = {
             id: key,
             text: '',
-            editting: true
-        }))
+            edit: true
+        }
+        localStorage.setItem('allTasks', JSON.stringify(taskObject)); // update with new task object
+
+        taskListUpdate(); // rerender our state list
     }
 
-    const saveTask = (newValue) => {
-        // update a task in state (after editing) and in localstorage
-        // change edit mode to false
-
+    const editTask = (id, newValue) => {
+        // update a task in localstorage
+        // change edit mode to false / true depending on use
+        const taskObject = JSON.parse(localStorage.getItem('allTasks'));
+        taskObject[id] = newValue; // update that id's fields
+        localStorage.setItem('allTasks', JSON.stringify(taskObject));
+        taskListUpdate();
     }
 
-    const editTask = (id) => {
-        // update task to edit mode
+
+    const deleteTask = (id) => {
+        // remove task from storage
+        const taskObject = JSON.parse(localStorage.getItem('allTasks'));
+        delete taskObject[id];
+        localStorage.setItem('allTasks', JSON.stringify(taskObject));
+        taskListUpdate();
     }
 
     return (
@@ -56,10 +77,17 @@ export function ListPage() {
                 <div className = "tasksContainer" style={{border: '1px solid black'}}>
                     <div className="searchAreaContainer">
                         <input className="searchBar" type="text" placeholder="Search" />
-                        <button className="newTaskButton">New</button>
+                        <button className="newTaskButton" onClick = {newTask}>New</button>
                     </div>
                     {Object.keys(taskList).map(key => {
-                        
+                        if (Object.keys(taskList).length){
+                            if (taskList[key].edit) {
+                                return <EditDisplay editTask = {editTask} taskValue = {taskList[key]} />
+                            }
+                            else if (!taskList[key].edit) {
+                                return <ItemDisplay editTask = {editTask} taskValue = {taskList[key]} deleteTask = {deleteTask} />
+                            }
+                        }
                     })}
                 </div>
             </div>
