@@ -1,7 +1,6 @@
-import React, { useEffect, useState,useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Login.css'
-import UserContext from '../../contexts/UserContext'
 
 export function LoginPage() {
 
@@ -24,13 +23,37 @@ export function LoginPage() {
         textvisible: 'hidden'
     })
 
-    // initialize context api 
-    const {setUserInfo} = useContext(UserContext);
+    const [loginStyle, setLoginStyle] = useState({
+        disable: true,
+        textvisible: 'hidden'
+    })
+
+
+    useEffect(() => {
+        if (localStorage.loginToken){
+            navigate('/list')
+        }
+    }, [])
+
+    useEffect(() => {
+        if ((inputs.email.length && inputs.password.length) && (emailStyle.textvisible === 'hidden' && passStyle.textvisible === 'hidden')){
+            setLoginStyle({
+                ...loginStyle,
+                disable: false
+            })
+        }
+        else {
+            setLoginStyle({
+                ...loginStyle,
+                disable: true
+            })
+        }
+    }, [inputs, passStyle, emailStyle])
 
     // validate email onchange
     const emailOnchange = (e) => {
         // validate email format
-        if (e.target.value && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.target.value)){
+        if (e.target.value && (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.target.value) || e.target.length > 50)){
             setEmailStyle({
                 borderColor: '1px solid red',
                 textvisible: 'visible'
@@ -61,8 +84,13 @@ export function LoginPage() {
         }
     }
 
+
     // submit form
     const onSubmit = (e) => {
+        setLoginStyle({
+            ...loginStyle,
+            disable: true
+        })
         e.preventDefault()
         // set up form data
         let formData = new FormData();
@@ -78,13 +106,19 @@ export function LoginPage() {
         })
         .then((res) => {
             // navigate to list page
-            setUserInfo({...res})
+            localStorage.setItem('loginToken', JSON.stringify(res.user_token))
             navigate('/list')
 
         })
-        .catch((err) => console.log('test'))
-            // add error text on bad login
+        .catch((err) => {
+            setLoginStyle({
+                disable: false,
+                textvisible: 'visible'
+            })
+        })
     }
+
+
 
     return (
         <div>
@@ -108,7 +142,11 @@ export function LoginPage() {
                             </div>
                             <div className='textWarning' style={{color: 'red', visibility: passStyle.textvisible}}>Password should be between 4 and 16 characters</div>
                         </div>
-                        <button className="loginButton" type="submit">Login</button>
+                        <div className = "loginContainer">
+                            <button className="loginButton" type="submit" disabled = {loginStyle.disable}>Login</button>
+                            <div className = 'textWarning' style={{color: 'red', visibility: loginStyle.textvisible}}>Invalid Email or Password</div>
+                        </div>
+
                     </form>
                 </div>
             </div>
