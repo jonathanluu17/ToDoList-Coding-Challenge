@@ -50,7 +50,7 @@ export function LoginPage() {
 
     const emailOnchange = (e) => {
         // validate email format
-        if (e.target.value && (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.target.value) || e.target.length > 50)){
+        if (e.target.value && (!/^\w+([.-]\w+)*@\w+([.-]\w+)*\.\w{2,3}$/.test(e.target.value) || e.target.value.length > 50)){
             setEmailStyle({
                 borderColor: '1px solid red',
                 textvisible: 'visible'
@@ -123,7 +123,7 @@ export function LoginPage() {
                 <div className="inputsMainContainer">
                     <form onSubmit={onSubmit}>
                         <div className="emailContainer">
-                            <h5 style={{margin:2}}>Email</h5>
+                            <p style={{margin:2, fontSize: 20}}>Email</p>
                             <div className="emailWrapper" style={{border: emailStyle.borderColor}}>
                                 <i className="material-icons" id="loginIcon">account_circle</i>
                                 <input className="emailInput" type='text' placeholder='user@rapptrlabs.com' onChange={emailOnchange}/>
@@ -131,7 +131,7 @@ export function LoginPage() {
                             <div className='textWarning' style={{color: 'red', visibility: emailStyle.textvisible}}>Not a valid email</div>
                         </div>
                         <div className="passContainer">
-                            <h5 style={{margin:2}}>Password</h5>
+                            <p style={{margin:2, fontSize: 20}}>Password</p>
                             <div className="passWrapper" style={{border: passStyle.borderColor}}>
                                 <i className="material-icons" id = "passwordIcon">lock</i>
                                 <input className="passInput" type='password' placeholder='Must be at least 4 characters' onChange={passOnchange} />

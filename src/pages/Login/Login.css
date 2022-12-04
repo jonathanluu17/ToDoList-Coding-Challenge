@@ -1,19 +1,7 @@
-.emailInput {
+.emailInput, .emailInput:active, .passInput, .passInput:active {
     border: none;
     outline: none;
-}
-.emailInput:active {
-    border: none;
-    outline: none;
-}
-
-.passInput {
-    border: none;
-    outline: none;
-}
-.passInput.active {
-    border: none;
-    outline: none;
+    width: 100%;
 }
 
 
@@ -25,6 +13,7 @@
     width: 100%;
     height:100%;
     position: fixed;
+    overflow: scroll;
 }
 
 .loginContainer {
@@ -40,8 +29,12 @@
     justify-content: flex-start;
 }
 
+.passContainer {
+    padding-bottom: 20px;
+}
+
 .mainLogo{
-    font-size: 100px;
+    font-size: 80px;
 }
 
 .inputsMainContainer{
@@ -50,4 +43,8 @@
 
 .loginButton {
     margin: 5px;
+    background-color: rgb(0, 140, 255);
+    color: white;
+    padding: 15px 250px;
+    font-size: 20px;
 }
