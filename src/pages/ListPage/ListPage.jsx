@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import EditDisplay from '../../components/EditDisplay/EditDisplay'
@@ -10,7 +10,7 @@ export function ListPage() {
     const [filterInput, setFilter] = useState('');
 
     useEffect(() => {
-        if (!localStorage.loginToken){
+        if (!localStorage.loginToken){ // check for existing login session
             navigate('/')
         }
         
@@ -21,11 +21,11 @@ export function ListPage() {
     },[])
 
     useEffect(() => {
-        // if string is blank, we match our task list to local storage
+        // if filer is blank, we match our task list to local storage
         if (!filterInput.length){
             taskListUpdate();
         } else {
-            const filterText = filterInput.toLowerCase();
+            const filterText = filterInput.toLowerCase(); // compare lowercase filterstring to lowercase of tasks
             const taskObject = JSON.parse(localStorage.getItem('allTasks'));
             const filteredTaskObject = {};
             if (Object.keys(taskObject).length) {
@@ -41,42 +41,39 @@ export function ListPage() {
 
 
     const taskListUpdate = () => {
+        // update our state taskList with localStorage
         const newList = {};
-        // pull from localstorage for values after looking for values
-        const taskObject = JSON.parse(localStorage.getItem('allTasks')); // object pulled from local storage
-        if (Object.keys(taskObject).length){ // check if a task collection exists
+        const taskObject = JSON.parse(localStorage.getItem('allTasks')); 
+        if (Object.keys(taskObject).length){ 
             for (let i =0; i < Object.keys(taskObject).length; i++){
                 newList[Object.keys(taskObject)[i]] = taskObject[Object.keys(taskObject)[i]]
             }
         }
-        // console.log('taskupdate   ', taskObject)
         setTaskList(newList);
     }
 
     const newTask = () => {
-        // add new task to our localstorage with no value
-        // render it as edit state
+        // add new task to our localstorage with no text in edit state
         let key = 0;
         const taskObject = JSON.parse(localStorage.getItem('allTasks'));
         if (Object.keys(taskObject).length) {
             key = Number(Object.keys(taskObject)[Object.keys(taskObject).length - 1]) + 1
         }
-        // update task object and re set
         taskObject[key] = {
             id: key,
             text: '',
             edit: true
         }
-        localStorage.setItem('allTasks', JSON.stringify(taskObject)); // update with new task object
+        localStorage.setItem('allTasks', JSON.stringify(taskObject)); 
 
-        taskListUpdate(); // rerender our state list
+        taskListUpdate(); 
     }
 
     const editTask = (id, newValue) => {
         // update a task in localstorage
         // change edit mode to false / true depending on use
         const taskObject = JSON.parse(localStorage.getItem('allTasks'));
-        taskObject[id] = newValue; // update that id's fields
+        taskObject[id] = newValue; 
         localStorage.setItem('allTasks', JSON.stringify(taskObject));
         taskListUpdate();
     }
@@ -91,7 +88,7 @@ export function ListPage() {
     }
 
     const logOut = () => {
-        // log out and remove logged in from localstorage
+        // log out and remove login token from localstorage
         localStorage.removeItem('loginToken');
         navigate('/')
     }

@@ -6,13 +6,11 @@ export function LoginPage() {
 
     const navigate = useNavigate()
 
-    // initialize form fields in state
     const [inputs, setInput] = useState({
         email: '',
         password: ''
     })
 
-    // initialize state for updating login input styling
     const [emailStyle, setEmailStyle] = useState({
         borderColor: '1px solid black',
         textvisible: 'hidden'
@@ -50,7 +48,6 @@ export function LoginPage() {
         }
     }, [inputs, passStyle, emailStyle])
 
-    // validate email onchange
     const emailOnchange = (e) => {
         // validate email format
         if (e.target.value && (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.target.value) || e.target.length > 50)){
@@ -67,7 +64,6 @@ export function LoginPage() {
         }
     }
 
-    // password onchange
     const passOnchange = (e) => {
         // validate password length
         if (e.target.value && (e.target.value.length < 4 || e.target.value.length > 16)) {
@@ -84,8 +80,6 @@ export function LoginPage() {
         }
     }
 
-
-    // submit form
     const onSubmit = (e) => {
         setLoginStyle({
             ...loginStyle,
@@ -105,7 +99,7 @@ export function LoginPage() {
             else throw new Error();
         })
         .then((res) => {
-            // navigate to list page
+            // navigate to list page and store login token (just using localstorage for this)
             localStorage.setItem('loginToken', JSON.stringify(res.user_token))
             navigate('/list')
 
@@ -129,15 +123,17 @@ export function LoginPage() {
                 <div className="inputsMainContainer">
                     <form onSubmit={onSubmit}>
                         <div className="emailContainer">
-                            <h5>Email</h5>
+                            <h5 style={{margin:2}}>Email</h5>
                             <div className="emailWrapper" style={{border: emailStyle.borderColor}}>
-                                <input className="emailInput" type='text' placeholder='user@rapptrlabs.com' onChange={emailOnchange} />
+                                <i className="material-icons" id="loginIcon">account_circle</i>
+                                <input className="emailInput" type='text' placeholder='user@rapptrlabs.com' onChange={emailOnchange}/>
                             </div>
                             <div className='textWarning' style={{color: 'red', visibility: emailStyle.textvisible}}>Not a valid email</div>
                         </div>
                         <div className="passContainer">
-                            <h5>Password</h5>
+                            <h5 style={{margin:2}}>Password</h5>
                             <div className="passWrapper" style={{border: passStyle.borderColor}}>
+                                <i className="material-icons" id = "passwordIcon">lock</i>
                                 <input className="passInput" type='password' placeholder='Must be at least 4 characters' onChange={passOnchange} />
                             </div>
                             <div className='textWarning' style={{color: 'red', visibility: passStyle.textvisible}}>Password should be between 4 and 16 characters</div>

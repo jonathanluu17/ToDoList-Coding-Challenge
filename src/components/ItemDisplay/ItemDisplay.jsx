@@ -2,9 +2,6 @@ import React from 'react'
 
 export default function ItemDisplay({editTask, deleteTask, taskValue}) {
 
-    // get values to display from task value
-    // button methods taken from listpage
-
     const editButton = () => {
         // change task into edit mode
         editTask(taskValue.id, {
