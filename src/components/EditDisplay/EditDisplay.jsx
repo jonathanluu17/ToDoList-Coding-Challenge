@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import './EditDisplay.css'
 
 export default function EditDisplay({editTask, taskValue}) {
 
@@ -12,7 +12,7 @@ export default function EditDisplay({editTask, taskValue}) {
 
     const saveTask = () => {
         // save task after editting
-        if ((taskField.length < 1 || taskField.length > 25)){
+        if ((!taskField.replace(/\s/g, '').length) || taskField.length < 1 || taskField.length > 25){
             alert('Task should be betwwen 1 and 25 characters!')
         }
         else {

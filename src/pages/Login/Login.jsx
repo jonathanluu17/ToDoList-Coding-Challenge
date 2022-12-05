@@ -86,7 +86,6 @@ export function LoginPage() {
             disable: true
         })
         e.preventDefault()
-        // set up form data
         let formData = new FormData();
         formData.append('email', inputs.email);
         formData.append('password', inputs.password);

@@ -4,8 +4,6 @@
     width: 100%;
 }
 
-
-
 .mainLoginContainer {
     display: flex;
     flex-direction: column;
@@ -47,4 +45,14 @@
     color: white;
     padding: 15px 250px;
     font-size: 20px;
+    cursor: pointer;
+}
+
+.loginButton:disabled {
+    margin: 5px;
+    background-color: rgb(142, 201, 250);
+    color: white;
+    padding: 15px 250px;
+    font-size: 20px;
+    cursor: auto;
 }

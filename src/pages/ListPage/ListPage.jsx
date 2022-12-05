@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import EditDisplay from '../../components/EditDisplay/EditDisplay'
 import ItemDisplay from '../../components/ItemDisplay/ItemDisplay'
+import './ListPage.css'
 
 export function ListPage() {
     const navigate = useNavigate()
@@ -103,10 +104,13 @@ export function ListPage() {
                 <button className= "logoutButton" onClick = {logOut}>Logout</button>
             </div>
             <div className = "listViewContainer">
-                <h1>My To-Do List</h1>
-                <div className = "tasksContainer" style={{border: '1px solid black'}}>
+                <p style = {{fontSize:50}}>My To-Do List</p>
+                <div className = "tasksContainer" style={{border: '3px solid rgb(51, 49, 49)'}}>
                     <div className="searchAreaContainer">
-                        <input className="searchBar" type="text" placeholder="Search" onChange = {searchFilter}/>
+                        <div className="searchWrapper">
+                            <i className = "material-icons">search</i>
+                            <input className="searchBar" type="text" placeholder="Search" onChange = {searchFilter}/>
+                        </div>
                         <button className="newTaskButton" onClick = {newTask}>New</button>
                     </div>
                     {Object.keys(taskList).map(key => {
